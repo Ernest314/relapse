@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/metadata">
+        <file>version.txt</file>
+    </qresource>
+</RCC>

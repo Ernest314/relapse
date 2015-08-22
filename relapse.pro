@@ -4,19 +4,38 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+CONFIG	+= c++11 c++14
 
+QT		+= core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = relapse
+TARGET	= relapse
 TEMPLATE = app
 
-
 SOURCES += main.cpp \
-    ui/mainwindow.cpp
+	ui/mainwindow.cpp
 
-HEADERS  += \
-    ui/mainwindow.h
+HEADERS += \
+	ui/mainwindow.h
 
-FORMS    += \
-    ui/mainwindow.ui
+FORMS	+= \
+	ui/mainwindow.ui
+
+RESOURCES += \
+	metadata.qrc
+
+
+
+# pre-/post- build packaging and stuff
+
+!exists( version.txt ) {
+	error( "No version.txt file found." )
+}
+
+versionTarget.target = $$PWD/version.txt
+versionTarget.depends = FORCE
+versionTarget.commands = $$PWD/build-num-updater.exe -f $$PWD/version.txt
+
+PRE_TARGETDEPS += $$PWD/version.txt
+QMAKE_EXTRA_TARGETS += versionTarget
+
