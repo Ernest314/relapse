@@ -83,20 +83,21 @@ void MainWindow::update_interval_interval()
 }
 void MainWindow::update_interval()
 {
-	timer_capture.setInterval(interval_capture*1000);
+	timer_capture.setInterval(interval_capture * 1000);
 
 	int total_sec = static_cast<int>(round(interval_capture));
-	int sec = static_cast<int>(round(total_sec));
-	int total_min = total_sec - sec;
-	int min = total_min / 60;
-	int total_hrs = total_min - min;
-	int hrs = total_hrs / 60;
+	int sec = total_sec % 60;
+	int total_min = (total_sec - sec) / 60;
+	int min = total_min % 60;
+	int total_hrs = (total_min - min) / 60;
+	int hrs = total_hrs % 60;
 
 	QString time;
 	if (hrs > 0) {
 		time += QString::number(hrs) + ":";
 	}
-	time += QString::number(min) + ":" + QString::number(sec);
+	time += QString::number(min).rightJustified(2, '0') + ":" +
+			QString::number(sec).rightJustified(2, '0');
 	ui->progressBar_timer->setFormat(time);
 }
 
