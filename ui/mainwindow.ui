@@ -386,7 +386,7 @@
                  </property>
                  <property name="icon">
                   <iconset resource="../icons.qrc">
-                   <normaloff>:/icons/icons/wrench.png</normaloff>:/icons/icons/wrench.png</iconset>
+                   <normaloff>:/icons/wrench.png</normaloff>:/icons/wrench.png</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -505,7 +505,7 @@
               </property>
               <property name="icon">
                <iconset resource="../icons.qrc">
-                <normaloff>:/icons/icons/info.png</normaloff>:/icons/icons/info.png</iconset>
+                <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -543,7 +543,7 @@
               </property>
               <property name="icon">
                <iconset resource="../icons.qrc">
-                <normaloff>:/icons/icons/help.png</normaloff>:/icons/icons/help.png</iconset>
+                <normaloff>:/icons/help.png</normaloff>:/icons/help.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -790,7 +790,7 @@
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../icons.qrc">:/icons/icons/monitor.png</pixmap>
+             <pixmap resource="../icons.qrc">:/icons/monitor.png</pixmap>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -875,7 +875,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="../icons.qrc">
-                  <normaloff>:/icons/icons/camera.png</normaloff>:/icons/icons/camera.png</iconset>
+                  <normaloff>:/icons/camera.png</normaloff>:/icons/camera.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -913,7 +913,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="../icons.qrc">
-                  <normaloff>:/icons/icons/play.png</normaloff>:/icons/icons/play.png</iconset>
+                  <normaloff>:/icons/play.png</normaloff>:/icons/play.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -951,7 +951,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="../icons.qrc">
-                  <normaloff>:/icons/icons/record.png</normaloff>:/icons/icons/record.png</iconset>
+                  <normaloff>:/icons/record.png</normaloff>:/icons/record.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -989,7 +989,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="../icons.qrc">
-                  <normaloff>:/icons/icons/minimize.png</normaloff>:/icons/icons/minimize.png</iconset>
+                  <normaloff>:/icons/minimize.png</normaloff>:/icons/minimize.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
