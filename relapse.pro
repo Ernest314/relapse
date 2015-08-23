@@ -20,7 +20,8 @@ FORMS	+= \
 	ui/mainwindow.ui
 
 RESOURCES += \
-	metadata.qrc
+	metadata.qrc \
+	icons.qrc
 
 
 
