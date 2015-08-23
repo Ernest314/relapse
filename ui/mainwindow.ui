@@ -66,6 +66,9 @@
               <property name="text">
                <string>Capture webcam</string>
               </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
             <item>
@@ -387,8 +390,8 @@
                  </property>
                  <property name="iconSize">
                   <size>
-                   <width>14</width>
-                   <height>14</height>
+                   <width>12</width>
+                   <height>12</height>
                   </size>
                  </property>
                 </widget>
@@ -728,7 +731,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QDoubleSpinBox" name="spinBox_captureFreq_inteval_sec">
+              <widget class="QDoubleSpinBox" name="spinBox_captureFreq_interval_sec">
                <property name="maximum">
                 <double>59.990000000000002</double>
                </property>
@@ -952,6 +955,44 @@
                 </property>
                 <property name="shortcut">
                  <string>Ctrl+Return</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="button_minimize">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>45</width>
+                  <height>45</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>45</width>
+                  <height>45</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../icons.qrc">
+                  <normaloff>:/icons/icons/minimize.png</normaloff>:/icons/icons/minimize.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="shortcut">
+                 <string>Ctrl+M</string>
                 </property>
                </widget>
               </item>

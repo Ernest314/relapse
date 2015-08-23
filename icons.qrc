@@ -9,5 +9,6 @@
         <file>icons/record.png</file>
         <file>icons/stop.png</file>
         <file>icons/wrench.png</file>
+        <file>icons/minimize.png</file>
     </qresource>
 </RCC>
