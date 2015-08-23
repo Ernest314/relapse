@@ -6,14 +6,19 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	dir_save(),
+	isRecording(false),
+	isPlaying(false),
+	interval_capture(15.00 * 1000),
 	timer_capture(this),
-	interval_capture(15.00)
+	timer_updateProgress(this),
+	dir_save()
 {
 	ui->setupUi(this);
 
 	QObject::connect(this, &MainWindow::updated_interval,
 					 this, &MainWindow::update_interval);
+	QObject::connect(&timer_updateProgress,	&QTimer::timeout,
+					 this,					&MainWindow::update_progress);
 
 	QObject::connect(ui->radioButton_captureFreq_count,
 					 &QRadioButton::toggled,
@@ -46,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 					 &MainWindow::update_interval_interval);
 
 	timer_capture.setInterval(interval_capture);
+	timer_updateProgress.setInterval(40);
 
 	ui->spinBox_captureFreq_interval_sec->setValue(15.00);
 	update_interval();
@@ -100,6 +106,16 @@ void MainWindow::update_interval()
 			QString::number(sec).rightJustified(2, '0');
 	ui->progressBar_timer->setFormat(time);
 }
+void MainWindow::update_progress()
+{
+	double time_passed =
+			static_cast<double>(interval_capture) -
+			static_cast<double>(timer_capture.remainingTime())/1000.0;
+	double fraction_passed =
+			time_passed / static_cast<double>(interval_capture);
+	int percentage = static_cast<int>(round(100 * fraction_passed));
+	ui->progressBar_timer->setValue(percentage);
+}
 
 void MainWindow::setEnabled_captureFreq_count(bool isEnabled)
 {
@@ -132,4 +148,21 @@ void MainWindow::on_pushButton_folder_clicked()
 												 "Save in folder...",
 												 dir_save);
 	ui->lineEdit_folder->setText(dir_save);
+}
+
+void MainWindow::on_button_start_clicked()
+{
+	isRecording = !isRecording;
+	switch (isRecording) {
+		case true :
+			ui->button_start->setIcon(QIcon(":/icons/stop.png"));
+			timer_capture.start();
+			timer_updateProgress.start();
+			break;
+		case false :
+			ui->button_start->setIcon(QIcon(":/icons/record.png"));
+			timer_capture.stop();
+			timer_updateProgress.stop();
+			break;
+	}
 }
