@@ -424,7 +424,7 @@
              <item>
               <layout class="QHBoxLayout" name="layout_folder">
                <property name="spacing">
-                <number>2</number>
+                <number>0</number>
                </property>
                <item>
                 <widget class="QLineEdit" name="lineEdit_folder"/>
@@ -512,6 +512,9 @@
                 <width>24</width>
                 <height>24</height>
                </size>
+              </property>
+              <property name="shortcut">
+               <string>Alt+Return</string>
               </property>
              </widget>
             </item>
@@ -648,6 +651,9 @@
              </item>
              <item>
               <widget class="QSpinBox" name="spinBox_captureFreq_count">
+               <property name="minimum">
+                <number>1</number>
+               </property>
                <property name="maximum">
                 <number>6000</number>
                </property>
@@ -878,7 +884,7 @@
                  </size>
                 </property>
                 <property name="shortcut">
-                 <string>Ctrl+Shift+Space</string>
+                 <string>Ctrl+S</string>
                 </property>
                </widget>
               </item>
@@ -954,7 +960,7 @@
                  </size>
                 </property>
                 <property name="shortcut">
-                 <string>Ctrl+Return</string>
+                 <string>Ctrl+Shift+Space</string>
                 </property>
                </widget>
               </item>
