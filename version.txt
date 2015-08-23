@@ -1,7 +1,7 @@
 major: 0
 minor: 1
 patch: 0
-build: 0004
-build-date: 2015-07-22
-build-time: 07:54:30
+build: 0022
+build-date: 2015-07-23
+build-time: 00:14:14
 type: alpha

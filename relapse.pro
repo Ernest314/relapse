@@ -1,8 +1,6 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2015-08-20T02:56:07
-#
-#-------------------------------------------------
+#--------------------------------------------------#
+# Project created by QtCreator 2015-08-20T02:56:07 #
+#--------------------------------------------------#
 
 CONFIG	+= c++11 c++14
 
@@ -26,16 +24,21 @@ RESOURCES += \
 
 
 
-# pre-/post- build packaging and stuff
+# Pre-/Post- build packaging and stuff
 
 !exists( version.txt ) {
 	error( "No version.txt file found." )
 }
 
-versionTarget.target = $$PWD/version.txt
-versionTarget.depends = FORCE
-versionTarget.commands = $$PWD/build-num-updater.exe -f $$PWD/version.txt
+QMAKE_POST_LINK += $$PWD/build-num-updater.exe -f $$PWD/version.txt
 
-PRE_TARGETDEPS += $$PWD/version.txt
-QMAKE_EXTRA_TARGETS += versionTarget
 
+
+# Old version incrementer that ran even if nothing was changed
+
+#versionTarget.target = $$PWD/version.txt
+#versionTarget.depends = FORCE
+#versionTarget.commands = $$PWD/build-num-updater.exe -f $$PWD/version.txt
+
+#PRE_TARGETDEPS += $$PWD/version.txt
+#QMAKE_EXTRA_TARGETS += versionTarget
