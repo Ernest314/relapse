@@ -98,8 +98,8 @@ MainWindow::~MainWindow()
 void MainWindow::screenshot()
 {
 	bool window_wasHidden = this->isHidden();
-	if (ui->checkBox_settings_hideOnCapture->isChecked()) {
-		this->hide();
+	if (ui->checkBox_settings_hideOnCapture->isChecked() && !window_wasHidden) {
+		this->setWindowOpacity(0);
 	}
 	QScreen* screen = QGuiApplication::primaryScreen();
 	QPixmap shot = screen->grabWindow(0);
@@ -107,7 +107,7 @@ void MainWindow::screenshot()
 	png.open(QIODevice::WriteOnly);
 	shot.save(&png, "PNG");
 	if (!window_wasHidden) {
-		this->show();
+		this->setWindowOpacity(1);
 	}
 }
 
