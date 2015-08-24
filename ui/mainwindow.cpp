@@ -19,8 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
 					 this, &MainWindow::update_interval);
 	QObject::connect(timer_updateProgress,	&QTimer::timeout,
 					 this,					&MainWindow::update_progress);
-	QObject::connect(timer_capture,			&QTimer::timeout,
-					 timer_capture,			static_cast<void (QTimer::*)()>(&QTimer::start));
+
+	// TODO: Delete this connection in Qt 5.5.1 where the remainingTime bug is fixed
+	// (Currently reminingTime stays at 0 after the first timeout(), even when
+	// isSingleShot == false.)
+	QObject::connect(timer_capture,		&QTimer::timeout,
+					 timer_capture,		static_cast<void (QTimer::*)()>(&QTimer::start));
 
 	QObject::connect(ui->radioButton_captureFreq_count,
 					 &QRadioButton::toggled,
@@ -54,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	timer_capture->setInterval(static_cast<int>(round(interval_capture * 1000)));
 	timer_capture->setSingleShot(false);
-	timer_updateProgress->setInterval(40);
+	timer_updateProgress->setInterval(500);
 	timer_updateProgress->setSingleShot(false);
 
 	ui->spinBox_captureFreq_interval_sec->setValue(15.00);
@@ -119,11 +123,6 @@ void MainWindow::update_progress()
 			time_passed / static_cast<double>(interval_capture);
 	int percentage = static_cast<int>(round(100 * fraction_passed));
 	ui->progressBar_timer->setValue(percentage);
-	if (timer_capture->isSingleShot()) {
-		ui->progressBar_timer->setFormat("it ded");
-	} else {
-		ui->progressBar_timer->setFormat("tick: " + QString::number(timer_capture->remainingTime()));
-	}
 }
 
 void MainWindow::setEnabled_captureFreq_count(bool isEnabled)
