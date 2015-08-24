@@ -46,8 +46,8 @@ private:
 	bool isRecording;
 	bool isPlaying;
 	double interval_capture; // seconds
-	QTimer timer_capture;
-	QTimer timer_updateProgress;
+	QTimer* timer_capture;
+	QTimer* timer_updateProgress;
 
 	QString dir_save;
 

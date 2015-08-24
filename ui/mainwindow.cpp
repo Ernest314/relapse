@@ -8,17 +8,19 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow),
 	isRecording(false),
 	isPlaying(false),
-	interval_capture(15.00 * 1000),
-	timer_capture(this),
-	timer_updateProgress(this),
+	interval_capture(15.00),
+	timer_capture(new QTimer(this)),
+	timer_updateProgress(new QTimer(this)),
 	dir_save()
 {
 	ui->setupUi(this);
 
 	QObject::connect(this, &MainWindow::updated_interval,
 					 this, &MainWindow::update_interval);
-	QObject::connect(&timer_updateProgress,	&QTimer::timeout,
+	QObject::connect(timer_updateProgress,	&QTimer::timeout,
 					 this,					&MainWindow::update_progress);
+	QObject::connect(timer_capture,			&QTimer::timeout,
+					 timer_capture,			static_cast<void (QTimer::*)()>(&QTimer::start));
 
 	QObject::connect(ui->radioButton_captureFreq_count,
 					 &QRadioButton::toggled,
@@ -50,8 +52,10 @@ MainWindow::MainWindow(QWidget *parent) :
 					 this,
 					 &MainWindow::update_interval_interval);
 
-	timer_capture.setInterval(interval_capture);
-	timer_updateProgress.setInterval(40);
+	timer_capture->setInterval(static_cast<int>(round(interval_capture * 1000)));
+	timer_capture->setSingleShot(false);
+	timer_updateProgress->setInterval(40);
+	timer_updateProgress->setSingleShot(false);
 
 	ui->spinBox_captureFreq_interval_sec->setValue(15.00);
 	update_interval();
@@ -89,7 +93,7 @@ void MainWindow::update_interval_interval()
 }
 void MainWindow::update_interval()
 {
-	timer_capture.setInterval(interval_capture * 1000);
+	timer_capture->setInterval(static_cast<int>(round(interval_capture)) * 1000);
 
 	int total_sec = static_cast<int>(round(interval_capture));
 	int sec = total_sec % 60;
@@ -110,11 +114,16 @@ void MainWindow::update_progress()
 {
 	double time_passed =
 			static_cast<double>(interval_capture) -
-			static_cast<double>(timer_capture.remainingTime())/1000.0;
+			static_cast<double>(timer_capture->remainingTime())/1000.0;
 	double fraction_passed =
 			time_passed / static_cast<double>(interval_capture);
 	int percentage = static_cast<int>(round(100 * fraction_passed));
 	ui->progressBar_timer->setValue(percentage);
+	if (timer_capture->isSingleShot()) {
+		ui->progressBar_timer->setFormat("it ded");
+	} else {
+		ui->progressBar_timer->setFormat("tick: " + QString::number(timer_capture->remainingTime()));
+	}
 }
 
 void MainWindow::setEnabled_captureFreq_count(bool isEnabled)
@@ -156,13 +165,13 @@ void MainWindow::on_button_start_clicked()
 	switch (isRecording) {
 		case true :
 			ui->button_start->setIcon(QIcon(":/icons/stop.png"));
-			timer_capture.start();
-			timer_updateProgress.start();
+			timer_capture->start();
+			timer_updateProgress->start();
 			break;
 		case false :
 			ui->button_start->setIcon(QIcon(":/icons/record.png"));
-			timer_capture.stop();
-			timer_updateProgress.stop();
+			timer_capture->stop();
+			timer_updateProgress->stop();
 			break;
 	}
 }
