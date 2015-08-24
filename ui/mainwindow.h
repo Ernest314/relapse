@@ -8,6 +8,8 @@
 #include <QString>
 #include <QTimer>
 
+#include <QSystemTrayIcon>
+
 #include <QFileDialog>
 
 #include <QMainWindow>
@@ -50,6 +52,7 @@ private:
 	double interval_capture; // seconds
 	QTimer* timer_capture;
 	QTimer* timer_updateProgress;
+	QSystemTrayIcon* trayIcon;
 
 	QString dir_save;
 

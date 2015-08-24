@@ -11,9 +11,17 @@ MainWindow::MainWindow(QWidget *parent) :
 	interval_capture(15.00),
 	timer_capture(new QTimer(this)),
 	timer_updateProgress(new QTimer(this)),
+	trayIcon(new QSystemTrayIcon(QIcon(":/icons/monitor.png"), this)),
 	dir_save()
 {
 	ui->setupUi(this);
+
+	QObject::connect(ui->button_minimize,
+					 static_cast<void (QAbstractButton::*)(bool)>(&QAbstractButton::clicked),
+					 this,
+					 &MainWindow::hide);
+	QObject::connect(trayIcon,	&QSystemTrayIcon::activated,
+					 this,		&MainWindow::show);
 
 	QObject::connect(this, &MainWindow::updated_interval,
 					 this, &MainWindow::update_interval);
@@ -56,6 +64,8 @@ MainWindow::MainWindow(QWidget *parent) :
 					 this,
 					 &MainWindow::update_interval_interval);
 
+	trayIcon->show();
+
 	timer_capture->setInterval(static_cast<int>(round(interval_capture * 1000)));
 	timer_capture->setSingleShot(false);
 	timer_updateProgress->setInterval(500);
@@ -72,6 +82,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+	delete timer_capture;
+	delete timer_updateProgress;
+	delete trayIcon;
 	delete ui;
 }
 
