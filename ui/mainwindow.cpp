@@ -97,9 +97,15 @@ void MainWindow::update_interval_interval()
 }
 void MainWindow::update_interval()
 {
+	// TODO: make this interval update smarter. (proportional?)
 	timer_capture->setInterval(static_cast<int>(round(interval_capture)) * 1000);
-
-	int total_sec = static_cast<int>(round(interval_capture));
+	update_progress();
+}
+void MainWindow::update_progress()
+{
+	double total_sec_accurate =
+			static_cast<double>(timer_capture->remainingTime()) / 1000.0;
+	int total_sec = static_cast<int>(round(total_sec_accurate));
 	int sec = total_sec % 60;
 	int total_min = (total_sec - sec) / 60;
 	int min = total_min % 60;
@@ -113,14 +119,9 @@ void MainWindow::update_interval()
 	time += QString::number(min).rightJustified(2, '0') + ":" +
 			QString::number(sec).rightJustified(2, '0');
 	ui->progressBar_timer->setFormat(time);
-}
-void MainWindow::update_progress()
-{
-	double time_passed =
-			static_cast<double>(interval_capture) -
-			static_cast<double>(timer_capture->remainingTime())/1000.0;
-	double fraction_passed =
-			time_passed / static_cast<double>(interval_capture);
+
+	double time_passed = interval_capture - total_sec_accurate;
+	double fraction_passed = time_passed / interval_capture;
 	int percentage = static_cast<int>(round(100 * fraction_passed));
 	ui->progressBar_timer->setValue(percentage);
 }
