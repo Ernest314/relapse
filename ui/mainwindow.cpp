@@ -16,6 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
+	QObject::connect(timer_capture,	&QTimer::timeout,
+					 this,			&MainWindow::screenshot);
+	QObject::connect(ui->button_capture,
+					 static_cast<void (QAbstractButton::*)(bool)>(&QAbstractButton::clicked),
+					 this,
+					 &MainWindow::screenshot);
+
 	QObject::connect(ui->button_minimize,
 					 static_cast<void (QAbstractButton::*)(bool)>(&QAbstractButton::clicked),
 					 this,
@@ -86,6 +93,22 @@ MainWindow::~MainWindow()
 	delete timer_updateProgress;
 	delete trayIcon;
 	delete ui;
+}
+
+void MainWindow::screenshot()
+{
+	bool window_wasHidden = this->isHidden();
+	if (ui->checkBox_settings_hideOnCapture->isChecked()) {
+		this->hide();
+	}
+	QScreen* screen = QGuiApplication::primaryScreen();
+	QPixmap shot = screen->grabWindow(0);
+	QFile png("hi.png");
+	png.open(QIODevice::WriteOnly);
+	shot.save(&png, "PNG");
+	if (!window_wasHidden) {
+		this->show();
+	}
 }
 
 void MainWindow::update_interval_count()

@@ -8,6 +8,14 @@
 #include <QString>
 #include <QTimer>
 
+#include <QPixmap>
+
+#include <QGuiApplication>
+
+#include <QFile>
+
+#include <QScreen>
+
 #include <QSystemTrayIcon>
 
 #include <QFileDialog>
@@ -32,6 +40,8 @@ signals:
 	void updated_interval();
 
 private slots:
+	void screenshot();
+
 	void update_interval_count();
 	void update_interval_interval();
 	void update_interval();

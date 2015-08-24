@@ -870,6 +870,9 @@
                   <height>45</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Capture a screenshot immediately. (Ctrl+S)</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -983,6 +986,9 @@
                   <width>45</width>
                   <height>45</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Minimize this window to the system tray. (Ctrl+M)</string>
                 </property>
                 <property name="text">
                  <string/>
