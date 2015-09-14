@@ -10,5 +10,6 @@
         <file alias="stop.png">icons/stop.png</file>
         <file alias="wrench.png">icons/wrench.png</file>
         <file alias="minimize.png">icons/minimize.png</file>
+        <file alias="external.png">icons/external.png</file>
     </qresource>
 </RCC>
