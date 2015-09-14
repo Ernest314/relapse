@@ -66,6 +66,9 @@
               <property name="text">
                <string>Capture webcam</string>
               </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
             <item>
@@ -231,17 +234,10 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>16</height>
+                 <height>4</height>
                 </size>
                </property>
               </spacer>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_filename">
-               <property name="text">
-                <string>Filename:</string>
-               </property>
-              </widget>
              </item>
              <item>
               <layout class="QHBoxLayout" name="layout_filename" stretch="1,0,0,0,1,0,0">
@@ -283,7 +279,7 @@
                <item>
                 <widget class="QLabel" name="label_filename_name">
                  <property name="text">
-                  <string>00001</string>
+                  <string>####</string>
                  </property>
                 </widget>
                </item>
@@ -383,12 +379,12 @@
                  </property>
                  <property name="icon">
                   <iconset resource="../icons.qrc">
-                   <normaloff>:/icons/icons/wrench.png</normaloff>:/icons/icons/wrench.png</iconset>
+                   <normaloff>:/icons/wrench.png</normaloff>:/icons/wrench.png</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
-                   <width>14</width>
-                   <height>14</height>
+                   <width>12</width>
+                   <height>12</height>
                   </size>
                  </property>
                 </widget>
@@ -421,13 +417,48 @@
              <item>
               <layout class="QHBoxLayout" name="layout_folder">
                <property name="spacing">
-                <number>2</number>
+                <number>0</number>
                </property>
+               <item>
+                <widget class="QPushButton" name="button_folder_open">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>20</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../icons.qrc">
+                   <normaloff>:/icons/external.png</normaloff>:/icons/external.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>12</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QLineEdit" name="lineEdit_folder"/>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_folder">
+                <widget class="QPushButton" name="button_folder_browse">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -502,13 +533,16 @@
               </property>
               <property name="icon">
                <iconset resource="../icons.qrc">
-                <normaloff>:/icons/icons/info.png</normaloff>:/icons/icons/info.png</iconset>
+                <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
               </property>
               <property name="iconSize">
                <size>
                 <width>24</width>
                 <height>24</height>
                </size>
+              </property>
+              <property name="shortcut">
+               <string>Alt+Return</string>
               </property>
              </widget>
             </item>
@@ -537,7 +571,7 @@
               </property>
               <property name="icon">
                <iconset resource="../icons.qrc">
-                <normaloff>:/icons/icons/help.png</normaloff>:/icons/icons/help.png</iconset>
+                <normaloff>:/icons/help.png</normaloff>:/icons/help.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -645,6 +679,9 @@
              </item>
              <item>
               <widget class="QSpinBox" name="spinBox_captureFreq_count">
+               <property name="minimum">
+                <number>1</number>
+               </property>
                <property name="maximum">
                 <number>6000</number>
                </property>
@@ -728,7 +765,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QDoubleSpinBox" name="spinBox_captureFreq_inteval_sec">
+              <widget class="QDoubleSpinBox" name="spinBox_captureFreq_interval_sec">
                <property name="maximum">
                 <double>59.990000000000002</double>
                </property>
@@ -781,7 +818,7 @@
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../icons.qrc">:/icons/icons/monitor.png</pixmap>
+             <pixmap resource="../icons.qrc">:/icons/monitor.png</pixmap>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -861,12 +898,15 @@
                   <height>45</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Capture a screenshot immediately. (Ctrl+S)</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
                 <property name="icon">
                  <iconset resource="../icons.qrc">
-                  <normaloff>:/icons/icons/camera.png</normaloff>:/icons/icons/camera.png</iconset>
+                  <normaloff>:/icons/camera.png</normaloff>:/icons/camera.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -875,12 +915,15 @@
                  </size>
                 </property>
                 <property name="shortcut">
-                 <string>Ctrl+Shift+Space</string>
+                 <string>Ctrl+S</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="button_play">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -904,7 +947,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="../icons.qrc">
-                  <normaloff>:/icons/icons/play.png</normaloff>:/icons/icons/play.png</iconset>
+                  <normaloff>:/icons/play.png</normaloff>:/icons/play.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -942,7 +985,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="../icons.qrc">
-                  <normaloff>:/icons/icons/record.png</normaloff>:/icons/icons/record.png</iconset>
+                  <normaloff>:/icons/record.png</normaloff>:/icons/record.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -951,7 +994,48 @@
                  </size>
                 </property>
                 <property name="shortcut">
-                 <string>Ctrl+Return</string>
+                 <string>Ctrl+Shift+Space</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="button_minimize">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>45</width>
+                  <height>45</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>45</width>
+                  <height>45</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Minimize this window to the system tray. (Ctrl+M)</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../icons.qrc">
+                  <normaloff>:/icons/minimize.png</normaloff>:/icons/minimize.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="shortcut">
+                 <string>Ctrl+M</string>
                 </property>
                </widget>
               </item>
