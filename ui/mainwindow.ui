@@ -234,17 +234,10 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>16</height>
+                 <height>4</height>
                 </size>
                </property>
               </spacer>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_filename">
-               <property name="text">
-                <string>Filename:</string>
-               </property>
-              </widget>
              </item>
              <item>
               <layout class="QHBoxLayout" name="layout_filename" stretch="1,0,0,0,1,0,0">
@@ -286,7 +279,7 @@
                <item>
                 <widget class="QLabel" name="label_filename_name">
                  <property name="text">
-                  <string>00001</string>
+                  <string>####</string>
                  </property>
                 </widget>
                </item>
@@ -928,6 +921,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="button_play">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
