@@ -12,21 +12,17 @@ MainWindow::MainWindow(QWidget *parent) :
 	timer_capture(new QTimer(this)),
 	timer_updateProgress(new QTimer(this)),
 	trayIcon(new QSystemTrayIcon(QIcon(":/icons/monitor.png"), this)),
-	dir_save()
+    file_num(1),
+    file_prefix(),
+    file_suffix(),
+    file_name(),
+    dir_save()
 {
 	ui->setupUi(this);
 
 	QObject::connect(timer_capture,	&QTimer::timeout,
-					 this,			&MainWindow::screenshot);
-	QObject::connect(ui->button_capture,
-					 static_cast<void (QAbstractButton::*)(bool)>(&QAbstractButton::clicked),
-					 this,
-					 &MainWindow::screenshot);
+                     this,			&MainWindow::screenshot);
 
-	QObject::connect(ui->button_minimize,
-					 static_cast<void (QAbstractButton::*)(bool)>(&QAbstractButton::clicked),
-					 this,
-					 &MainWindow::hide);
 	QObject::connect(trayIcon,	&QSystemTrayIcon::activated,
 					 this,		&MainWindow::show);
 
@@ -38,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	// TODO: Delete this connection in Qt 5.5.1 where the remainingTime bug is fixed
 	// (Currently reminingTime stays at 0 after the first timeout(), even when
 	// isSingleShot == false.)
+    // TODO: Eventually move to using Qt Animation Framework for smoother (faked) animation.
 	QObject::connect(timer_capture,		&QTimer::timeout,
 					 timer_capture,		static_cast<void (QTimer::*)()>(&QTimer::start));
 
@@ -98,14 +95,22 @@ MainWindow::~MainWindow()
 void MainWindow::screenshot()
 {
 	bool window_wasHidden = this->isHidden();
-	if (ui->checkBox_settings_hideOnCapture->isChecked() && !window_wasHidden) {
+    bool hide_on_capture = ui->checkBox_settings_hideOnCapture->isChecked();
+    if (hide_on_capture && !window_wasHidden) {
 		this->setWindowOpacity(0);
 	}
+
+    // NOTE: .png is the only allowed format for design simplicity.
 	QScreen* screen = QGuiApplication::primaryScreen();
-	QPixmap shot = screen->grabWindow(0);
-	QFile png("hi.png");
-	png.open(QIODevice::WriteOnly);
-	shot.save(&png, "PNG");
+    QPixmap screenshot = screen->grabWindow(0);
+    QString file_num_str = QString::number(file_num).rightJustified(4, '0');
+        // ^ 4 is what blender uses for its rendering.
+    file_name = dir_save + file_prefix + file_num_str + file_suffix + ".png";
+    QFile file_out(file_name); // TODO: Check if file already exists.
+    file_out.open(QIODevice::WriteOnly);
+    screenshot.save(&file_out, "PNG");
+    file_num++;
+
 	if (!window_wasHidden) {
 		this->setWindowOpacity(1);
 	}
@@ -133,7 +138,8 @@ void MainWindow::update_interval_interval()
 }
 void MainWindow::update_interval()
 {
-	// TODO: make this interval update smarter. (proportional?)
+    // TODO: Make this interval update proportional to current elapsed time.
+    // Also make sure it goes and changes that. (What is the desired behavior?)
 	timer_capture->setInterval(static_cast<int>(round(interval_capture)) * 1000);
 	update_progress();
 }
@@ -187,7 +193,16 @@ void MainWindow::on_radioButton_captureFreq_interval_toggled(bool checked)
 	setEnabled_captureFreq_count(!checked);
 }
 
-void MainWindow::on_pushButton_folder_clicked()
+void MainWindow::on_lineEdit_filename_prefix_textChanged(const QString &text_changed)
+{
+    file_prefix = text_changed;
+}
+void MainWindow::on_lineEdit_filename_suffix_textChanged(const QString &text_changed)
+{
+    file_suffix = text_changed;
+}
+
+void MainWindow::on_button_folder_browse_clicked()
 {
 	dir_save = QFileDialog::getExistingDirectory(this,
 												 "Save in folder...",
@@ -195,19 +210,58 @@ void MainWindow::on_pushButton_folder_clicked()
 	ui->lineEdit_folder->setText(dir_save);
 }
 
+void MainWindow::on_button_minimize_clicked()
+{
+    this->hide();
+}
 void MainWindow::on_button_start_clicked()
 {
 	isRecording = !isRecording;
-	switch (isRecording) {
+    switch (isRecording) {
 		case true :
 			ui->button_start->setIcon(QIcon(":/icons/stop.png"));
+            ui->button_play->setEnabled(true);
+            ui->button_play->setIcon(QIcon(":/icons/pause.png"));
+            isPlaying = true;
 			timer_capture->start();
 			timer_updateProgress->start();
+            file_num = 1;
 			break;
 		case false :
 			ui->button_start->setIcon(QIcon(":/icons/record.png"));
+            ui->button_play->setEnabled(false);
+            ui->button_play->setIcon(QIcon(":/icons/play.png"));
+            isPlaying = false;
 			timer_capture->stop();
 			timer_updateProgress->stop();
 			break;
 	}
+}
+void MainWindow::on_button_play_clicked()
+{
+    // TODO: Extend QTimer to provide a play/pause interface.
+    // Maybe use QElapsedTimer instead?
+    isPlaying = !isPlaying;
+    switch (isPlaying) {
+        case true :
+            ui->button_play->setIcon(QIcon(":/icons/pause.png"));
+            timer_capture->start();
+            timer_updateProgress->start();
+            break;
+        case false :
+            ui->button_play->setIcon(QIcon(":/icons/play.png"));
+            timer_capture->stop();
+            timer_updateProgress->stop();
+            break;
+    }
+}
+void MainWindow::on_button_capture_clicked()
+{
+    screenshot();
+}
+
+void MainWindow::on_button_folder_open_clicked()
+{
+    QString native_path = "file:///" + QDir::toNativeSeparators(dir_save);
+    QDesktopServices::openUrl(QUrl(native_path));
 }
