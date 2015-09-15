@@ -105,10 +105,16 @@ void MainWindow::screenshot()
     QPixmap screenshot = screen->grabWindow(0);
     QString file_num_str = QString::number(file_num).rightJustified(4, '0');
         // ^ 4 is what blender uses for its rendering.
-    file_name = dir_save + file_prefix + file_num_str + file_suffix + ".png";
+    file_name = dir_save + "/" + file_prefix + file_num_str + file_suffix + ".png";
     QFile file_out(file_name); // TODO: Check if file already exists.
     file_out.open(QIODevice::WriteOnly);
     screenshot.save(&file_out, "PNG");
+    int thumbnail_width = ui->label_thumbnail->width();
+    int thumbnail_height = ui->label_thumbnail->height();
+    QPixmap screenshot_scaled = screenshot.scaled(thumbnail_width,
+                                                  thumbnail_height,
+                                                  Qt::KeepAspectRatio);
+    ui->label_thumbnail->setPixmap(screenshot_scaled);
     file_num++;
 
 	if (!window_wasHidden) {
