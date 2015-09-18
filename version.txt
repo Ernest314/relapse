@@ -1,5 +1,5 @@
 major: 0
-minor: 1
+minor: 3
 patch: 0
 build: 0163
 build-date: 2015-08-15

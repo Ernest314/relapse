@@ -1,3 +1,6 @@
+# Don't commit batch files (author specific)
+deploy-win.cmd
+
 # Temporarily don't commit icons
 
 icons/*
