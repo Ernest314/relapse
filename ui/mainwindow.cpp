@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     file_prefix(),
     file_suffix(),
     file_name(),
-    dir_save()
+    dir_save(QCoreApplication::applicationDirPath()+"/screenshots")
 {
 	ui->setupUi(this);
 
@@ -25,6 +25,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	QObject::connect(trayIcon,	&QSystemTrayIcon::activated,
 					 this,		&MainWindow::show);
+    QObject::connect(trayIcon,  &QSystemTrayIcon::activated,
+                     this,      &MainWindow::showNormal);
+    // `showNormal()` is needed to show the window after minimizing to tray.
+    // TODO: Improve this logic somehow? Only show if checkbox is checked?
+    QObject::connect(trayIcon,  &QSystemTrayIcon::activated,
+                     this,      &MainWindow::raise);
+    QObject::connect(trayIcon,  &QSystemTrayIcon::activated,
+                     this,      &MainWindow::activateWindow);
 
 	QObject::connect(this, &MainWindow::updated_interval,
 					 this, &MainWindow::update_interval);
@@ -82,6 +90,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	setDisabled_captureFreq_count();
 	ui->radioButton_captureFreq_interval->setChecked(true);
 	setEnabled_captureFreq_interval();
+
+    ui->lineEdit_folder->setText(QCoreApplication::applicationDirPath()+"/screenshots");
+    QDir().mkpath(dir_save);
 }
 
 MainWindow::~MainWindow()
@@ -161,7 +172,7 @@ void MainWindow::update_progress()
 	int hrs = total_hrs % 60;
 
 	QString time;
-	if (hrs > 0) {
+    if (hrs > 0) {
 		time += QString::number(hrs) + ":";
 	}
 	time += QString::number(min).rightJustified(2, '0') + ":" +
@@ -172,6 +183,48 @@ void MainWindow::update_progress()
 	double fraction_passed = time_passed / interval_capture;
 	int percentage = static_cast<int>(round(100 * fraction_passed));
 	ui->progressBar_timer->setValue(percentage);
+}
+
+bool MainWindow::event(QEvent *event)
+{
+    if (event->type() == QEvent::WindowStateChange) {
+        if (this->windowState() == Qt::WindowMinimized) {
+            if (ui->checkBox_settings_minimizeToTray->isChecked()) {
+                this->hide();
+                return true;
+            }
+        }
+    }
+    return QMainWindow::event(event);
+}
+void MainWindow::showEvent(QShowEvent *event)
+{
+    if (ui->checkBox_settings_pauseOnOpen->isChecked()) {
+        if (isPlaying) {
+            on_button_play_clicked();
+        }
+    }
+    event->accept();
+}
+void MainWindow::hideEvent(QHideEvent *event)
+{
+    // TODO: Added an "auto_paused" variable to control this, so that the
+    // timer doesn't start if the user had manually paused the recording.
+    if (ui->checkBox_settings_pauseOnOpen->isChecked()) {
+        if (!isPlaying && ui->button_play->isEnabled()) {
+            on_button_play_clicked();
+        }
+    }
+    event->accept();
+}
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    if (ui->checkBox_settings_closeToTray->isChecked()) {
+        this->hide();
+        event->ignore();
+    } else {
+        event->accept();
+    }
 }
 
 void MainWindow::setEnabled_captureFreq_count(bool isEnabled)
@@ -207,12 +260,23 @@ void MainWindow::on_lineEdit_filename_suffix_textChanged(const QString &text_cha
 {
     file_suffix = text_changed;
 }
-
+void MainWindow::on_lineEdit_folder_textChanged(const QString &text_changed)
+{
+    QString cleaned_path = text_changed;
+    QString last_char = text_changed[text_changed.length()-1];
+    if (last_char == "/" || last_char ==  "\\") {
+        cleaned_path.chop(1);
+    }
+    dir_save = text_changed;
+}
 void MainWindow::on_button_folder_browse_clicked()
 {
-	dir_save = QFileDialog::getExistingDirectory(this,
-												 "Save in folder...",
-												 dir_save);
+    QString dir_buf = QFileDialog::getExistingDirectory(this,
+                                                        "Save in folder...",
+                                                        dir_save);
+    if (!dir_buf.isEmpty()) {
+        dir_save = dir_buf;
+    }
 	ui->lineEdit_folder->setText(dir_save);
 }
 

@@ -10,6 +10,10 @@
 
 #include <QPixmap>
 
+#include <QShowEvent>
+#include <QHideEvent>
+#include <QCloseEvent>
+
 #include <QGuiApplication>
 
 #include <QFile>
@@ -24,6 +28,9 @@
 #include <QMainWindow>
 
 
+
+// TODO: Compile Qt without webkit module, to exclude ICU libraries.
+// TODO: Move all "preferences" to its own class.
 
 namespace Ui {
 class MainWindow;
@@ -53,6 +60,7 @@ private slots:
 
     void on_lineEdit_filename_prefix_textChanged(const QString &text_changed);
     void on_lineEdit_filename_suffix_textChanged(const QString &text_changed);
+    void on_lineEdit_folder_textChanged(const QString &text_changed);
     void on_button_folder_browse_clicked();
 
     void on_button_minimize_clicked();
@@ -79,6 +87,11 @@ private:
     QString file_suffix;
     QString file_name;
     QString dir_save;
+
+    bool event(QEvent* event);
+    void showEvent(QShowEvent* event);
+    void hideEvent(QHideEvent* event);
+    void closeEvent(QCloseEvent* event);
 
 	void setEnabled_captureFreq_count(bool isEnabled=true);
 	void setDisabled_captureFreq_count() { setEnabled_captureFreq_count(false); }
