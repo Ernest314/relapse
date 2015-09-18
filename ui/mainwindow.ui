@@ -72,25 +72,9 @@
              </widget>
             </item>
             <item>
-             <spacer name="spacer_captureSettings_A">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Maximum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>16</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
              <widget class="QCheckBox" name="checkBox_settings_timestamp">
               <property name="text">
-               <string>Timestamp screenshots</string>
+               <string>Capture timestamps</string>
               </property>
              </widget>
             </item>
@@ -793,12 +777,25 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="layout_capture">
+         <spacer name="spacer_settings_controls">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="layout_capture" stretch="3,5">
           <item>
            <widget class="QLabel" name="label_thumbnail">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>4</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
